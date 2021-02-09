@@ -1,0 +1,37 @@
+name: test R
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up R 
+      uses: r-lib/actions/setup-r@v1
+
+    - name: install libcurl
+      run: sudo apt-get install libcurl4-openssl-dev
+    
+    - name: Query dependencies
+      run: |
+          install.packages('remotes')
+      shell: Rscript {0}
+
+    - name: Cache R packages
+      id: cache-packages
+      uses: actions/cache@v2
+      with:
+            path: ${{ env.R_LIBS_USER }} 
+            key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-2-${{ hashFiles('install.R') }}
+
+    - name: Install R Packages
+      run: Rscript install.R
+
+    - name: create x.RData
+      run: Rscript run.R
+    - name: load x.Rdata
+      run: Rscript load.R
+        

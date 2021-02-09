@@ -1,0 +1,20 @@
+language: r
+install:
+    - sudo apt-get install r-base
+#    - sudo Rscript install.R
+cache: packages
+
+jobs:
+    stage: create RData
+    script: Rscript run.R
+
+    workspaces:
+        create:
+            name: ws1
+            paths:
+                - x.RData
+
+    stage: load RData
+    workspaces:
+        use: ws1
+    script: Rscript load.R

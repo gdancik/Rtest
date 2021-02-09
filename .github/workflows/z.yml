@@ -1,0 +1,21 @@
+name: test R-z
+
+on: 
+    push:
+        paths:
+            - install.R
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up R 
+      uses: r-lib/actions/setup-r@v1
+
+    - name: test 
+      run: echo 'hello' 
+        
